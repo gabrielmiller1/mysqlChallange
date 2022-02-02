@@ -16,9 +16,12 @@ public class Program {
 
         Connection conn = null;
         Statement st = null;
-        String comand = null;
+        String sqlComand = null;
 
-        System.out.println("\n* Press 'f' to exit.\n");
+        System.out.println("\n***** Instructions *****\n"
+                + "* SQL commands must be done per line.\n"
+                + "* After each command type \"go;\" for it to be sent.\n"
+                + "* To end the program press \"f\" and give the command \"go;\"\n");
 
         System.out.print("Enter DB properties file path: ");
         String properties = sc.nextLine();
@@ -26,20 +29,20 @@ public class Program {
         DB.loadProperties(properties);
 
         System.out.println("DB properties loaded!\n");
-        
-        do{
-            comand = sc.nextLine();
-            
-            if(comand.equals("f go;")){
-                
+
+        do {
+            sqlComand = sc.nextLine();
+
+            if (sqlComand.equals("f go;")) {
+
                 DB.closeConnection();
-                
+
                 System.exit(0);
             }
-            
-            int comandLength = comand.length();
 
-            String equalString = comand.substring(comandLength - 4, comandLength);
+            int comandLength = sqlComand.length();
+
+            String equalString = sqlComand.substring(comandLength - 4, comandLength);
 
             if (equalString.equals(" go;")) {
                 try {
@@ -47,19 +50,18 @@ public class Program {
 
                     st = conn.createStatement();
 
-                    st.execute(comand.substring(0, comandLength - 4));
+                    st.execute(sqlComand.substring(0, comandLength - 4));
 
                     System.out.println("Comando realizado com sucesso!");
-                    
+
                 } catch (SQLException e) {
                     throw new DbException("Error executing command:" + e.getMessage());
                 }
             } else {
                 System.out.println("Error executing command: missing 'go;'");
             }
-            
-        }while(true);
+
+        } while (true);
 
     }
 }
-
